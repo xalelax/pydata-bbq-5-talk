@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>reveal.js</title>
+
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/alex.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+	<script src="plugin/math/math.js"></script>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section>
+				<h1 class="r-fit-text">Learning new words<br>with Python!</h1>
+				<br><br>
+				<h2>Dr. Alessandro Angioi</h2>
+				<h3>Big Pydata BBQ #5</h3>
+				<h3>Heidelberg, 2023-09-21</h3>
+			</section>
+			<section>
+				<h3 class="r-fit-text">Why is "learning"<br>languages "easy"?</h3>
+				<h3 class="r-fit-text fragment">...and why is it hard?</h1>
+			</section>
+			<section>
+				<h4>Let's calculate how often some words are used</h4>
+				<ul class="r-fit-text">
+					<li>Get a text dataset. I used WikiText-103, by Merity et al.; ~800k paragraphs from Wikipedia.</li>
+					<li>Clean it up as much as needed</li>
+					<li>Process it with spacy
+						<pre class="python"><code data-trim data-noescape>
+							import spacy
+
+							nlp = spacy.load("en_core_web_sm")
+							doc = nlp.pipe(dataset[batch_start:batch_end])
+						</code></pre>
+					</li>
+					<li>Congrats; after this runs you have access to lemmas, pos tags
+						and other cool stuff!
+					</li>
+					<li>What if we plotted how frequently a lemma appears in the dataset?<br>
+						(lemmas are the "base" form of a word, e.g. "running" -> "run", "was" -> "be")
+					</li>
+				</ul>
+			</section>
+			<section data-state="zipfmand">
+				<h3>Zipf-Mandelbrot Law:</h3> $\text{frequency}\sim 1/(\text{rank}+b)^a$
+				<div class="r-stretch" id="plot-zipfmand"></div>
+			</section>
+			<section>
+				<h3>Problem: "rare" words are often rather boring</h3>
+				<br><br>
+				<h2 class="fragment">Where do we find the best words?</h2>
+			</section>
+			<section>
+				<div class="r-stack">
+					<h2>Novels are all you need!</h2>
+					<img class="fragment" style="height: 500px; margin-bottom: 300px; margin-right: 50%;"
+						src="assets/aild.jpg">
+					<img class="fragment" style="height: 500px; margin-bottom: 300px; margin-left: 50%;"
+						src="assets/shadow.jpg">
+					<img class="fragment" style="height: 500px; margin-right: 50%;" src="assets/ulysses.jpg">
+					<img class="fragment" style="height: 500px; margin-left: 50%;" src="assets/ij.jpg">
+					<img class="fragment" style="height: 700px; margin-bottom: 100px;" src="assets/bm.png">
+				</div>
+			</section>
+			<section data-state="tfidf">
+				<h4>Frequency of words:<br>WikiText-103 vs Blood Meridian:</h4>
+				<div class="r-stretch" id="plot-tfidf"></div>
+				<p>Note: this comparison is essentially like TF-IDF</p>
+			</section>
+			<section>
+				<h4>~1k words in novel not on WikiText-103</h4>
+				<ul class="r-stretch">
+					<li>Tatterdemalion (tattered, dilapidated)</li>
+					<li>Bedight (adorned, bedecked, decorated)</li>
+					<li>Madstone (rock which in American folklore is supposed
+						to heal one from poisonous bites)
+					</li>
+				</ul><br>
+				<h4 style="margin-top: 1em;">On WikiText-103, but very rare:</h4>
+				<ul class="r-stretch">
+					<li>Sidle (walk in a furtive, unobtrusive, or timid manner)</li>
+					<li>Esker (a timber beam of small cross section)</li>
+				</ul>
+			</section>
+			<section>
+				<!-- <h2>Conclusions</h2> -->
+				<!-- bullet list  -->
+				<ul class="r-stretch">
+					<li>Spacy is a great tool for exploring languages! All I did does not
+						require more than their 101 tutorial.
+					</li>
+					<li style="margin-top: 1em;">This is just the start. Aside from learning new words, can you
+						characterize the complexity of an
+						author's prose?</li>
+					<li style="margin-top: 1em;">So much stuff did not make it into this presentation; I will write a
+						blog post about it on
+						my website,
+						<a href="https://www.angioi.com">www.angioi.com</a>
+					</li>
+					<li style="margin-top: 1em;">
+						You can play with the plots I have shown here on <a
+							href="https://www.angioi.com/bbqtalk">angioi.com/bbqtalk</a>
+					</li>
+				</ul> <br><br>
+				<h3>Thanks a lot for your attention!</h3>
+			</section>
+
+		</div>
+	</div>
+
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			hash: true,
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX]
+		});
+		Reveal.on("zipfmand", function () {
+			Plotly.d3.json("assets/freq.json", function (data) {
+				data.layout.template.layout.hoverlabel = {
+					font: {
+						size: 24 // Adjust the text size as needed
+					}
+				}
+
+				// Recreate the plot with the updated data
+				Plotly.newPlot("plot-zipfmand", data);
+
+				Array.from(document.querySelectorAll('g.hoverlayer')).forEach(hoverEl => {
+					let mainSvgEl = hoverEl.parentElement;
+					mainSvgEl.style['overflow'] = 'visible';
+				});
+			});
+		});
+		Reveal.on("tfidf", function () {
+			Plotly.d3.json("assets/bm_vs_wiki_freq.json", function (data) {
+				data.layout.template.layout.hoverlabel = {
+					font: {
+						size: 24 // Adjust the text size as needed
+					}
+				}
+				console.log(data.layout)
+				// Recreate the plot with the updated data
+				Plotly.newPlot("plot-tfidf", data);
+				Array.from(document.querySelectorAll('g.hoverlayer')).forEach(hoverEl => {
+					let mainSvgEl = hoverEl.parentElement;
+					mainSvgEl.style['overflow'] = 'visible';
+				});
+			});
+		});
+	</script>
+</body>
+
+</html>
