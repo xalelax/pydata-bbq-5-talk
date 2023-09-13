@@ -21,19 +21,19 @@
 <body>
 	<div class="reveal">
 		<div class="slides">
-			<section>
+			<section data-background-color="white">
 				<h1 class="r-fit-text">Learning new words<br>with Python!</h1>
 				<br><br>
-				<h2>Dr. Alessandro Angioi</h2>
-				<h3>Big Pydata BBQ #5</h3>
-				<h3>Heidelberg, 2023-09-21</h3>
+				<h2 style="margin-top: 5%;">Dr. Alessandro Angioi</h2>
+				<h3 style="font-size: 1em">Big Pydata BBQ #5</h3>
+				<h3 style="font-size: 1em">Heidelberg, 2023-09-21</h3>
 			</section>
-			<section>
+			<section data-background-color="black">
 				<h3 class="r-fit-text">Why is "learning"<br>languages "easy"?</h3>
 				<h3 class="r-fit-text fragment">...and why is it hard?</h1>
 			</section>
-			<section>
-				<h4>Let's calculate how often some words are used</h4>
+			<section data-background-color="white">
+				<h4>How are words typically distributed?</h4>
 				<ul class="r-fit-text">
 					<li>Get a text dataset. I used WikiText-103, by Merity et al.; ~800k paragraphs from Wikipedia.</li>
 					<li>Clean it up as much as needed</li>
@@ -57,12 +57,12 @@
 				<h3>Zipf-Mandelbrot Law:</h3> $\text{frequency}\sim 1/(\text{rank}+b)^a$
 				<div class="r-stretch" id="plot-zipfmand"></div>
 			</section>
-			<section>
+			<section data-background-color="black">
 				<h3>Problem: "rare" words are often rather boring</h3>
 				<br><br>
 				<h2 class="fragment">Where do we find the best words?</h2>
 			</section>
-			<section>
+			<section data-state="white-bg">
 				<div class="r-stack">
 					<h2>Novels are all you need!</h2>
 					<img class="fragment" style="height: 500px; margin-bottom: 300px; margin-right: 50%;"

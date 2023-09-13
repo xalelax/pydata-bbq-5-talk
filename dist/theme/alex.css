@@ -141,6 +141,7 @@ section.has-light-background, section.has-light-background h1, section.has-light
 
 .reveal h4 {
   font-size: var(--r-heading4-size);
+  -webkit-text-stroke: 2px black
 }
 
 .reveal h1 {
